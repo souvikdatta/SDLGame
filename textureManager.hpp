@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class TextureManager
+typedef class TextureManager
 {
 private:
     //This will hold the mapping between the Texture ID and
@@ -35,6 +35,6 @@ public:
 
     static TextureManager& getInstance();
     virtual ~TextureManager();
-};
+}TheTextureManager;
 
 #endif

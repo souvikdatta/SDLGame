@@ -38,7 +38,7 @@ bool Game::init(const string nameOfWindow, const int xPos, \
                 SDL_SetRenderDrawColor (m_pRenderer, 255, 0, 0, 255);
 
 
-                if (TextureManager::getInstance().load ("assets/animate-alpha.png", \
+                if (TheTextureManager::getInstance().load ("assets/animate-alpha.png", \
                     "animate", m_pRenderer) == false)
                 {
                     retStatus =  false;

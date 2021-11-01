@@ -3,7 +3,7 @@
 void GameObject::draw(SDL_Renderer *pRenderer)
 {
     //cout << "GameObject:: Draw called" << "\n";
-    TextureManager::getInstance().drawFrame (m_textureID, m_x, m_y, m_width, m_height, \
+    TheTextureManager::getInstance().drawFrame (m_textureID, m_x, m_y, m_width, m_height, \
         pRenderer, m_RowNumber, m_CurrentFrame);
 }
 
