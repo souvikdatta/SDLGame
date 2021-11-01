@@ -16,6 +16,8 @@ int main()
         pGameObj->handleEvents();
         pGameObj->update();
         pGameObj->render();
+
+        SDL_Delay (10);
     }
 
     pGameObj->clean();
