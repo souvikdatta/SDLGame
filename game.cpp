@@ -11,7 +11,8 @@ Game::~Game()
 }
 
 bool Game::init(const string nameOfWindow, const int xPos, \
-    const int yPos, const int wWidth, const int hHeight, const bool isFullScreen)
+    const int yPos, const int wWidth, const int hHeight, \
+    const bool isFullScreen)
 {
     bool retStatus = true;
 
@@ -36,8 +37,17 @@ bool Game::init(const string nameOfWindow, const int xPos, \
                 //Set render color
                 SDL_SetRenderDrawColor (m_pRenderer, 255, 0, 0, 255);
 
+                if (TextureManager::getInstance().load ("assets/animate-alpha.png", \
+                    "animate", m_pRenderer) == false)
+                {
+                    retStatus =  false;
+                }
+
+
+#if 0
                 //Load the assets
-                SDL_Surface *pTempSurface = SDL_LoadBMP ("assets/rider.bmp");
+                //SDL_Surface *pTempSurface = SDL_LoadBMP ("assets/animate.bmp");
+                SDL_Surface *pTempSurface = IMG_Load ("assets/animate-alpha.png");
                 if(pTempSurface)
                 {
                     //From the Surface, we create a Texture
@@ -57,17 +67,16 @@ bool Game::init(const string nameOfWindow, const int xPos, \
                         // m_destinationRectangle.w = m_sourceRectangle.w = 50;
                         // m_destinationRectangle.h = m_sourceRectangle.h = 50;
 
-                        m_sourceRectangle.x = 50;
-                        m_sourceRectangle.y = 50;
-                        m_destinationRectangle.x=50;
-                        m_destinationRectangle.y=50;
+                        m_sourceRectangle.x = 0;
+                        m_sourceRectangle.y = 0;
+                        m_destinationRectangle.x=0;
+                        m_destinationRectangle.y=0;
 
-                        m_sourceRectangle.w = 50;
-                        m_sourceRectangle.h = 50;
+                        m_sourceRectangle.w = 128;
+                        m_sourceRectangle.h = 82;
 
-                        m_destinationRectangle.w = 100;
-                        m_destinationRectangle.h = 100;
-
+                        m_destinationRectangle.w = 128;
+                        m_destinationRectangle.h = 82;
                     }
                     else
                     {
@@ -80,7 +89,9 @@ bool Game::init(const string nameOfWindow, const int xPos, \
                     retStatus =  false;
                     cout << "Unable to create Surface" << endl;
                 }
+#endif
             }
+
         }
         else 
         {
@@ -102,19 +113,35 @@ void Game::render()
     SDL_RenderClear (m_pRenderer);
 
     //Draw the Texture to the window
-    // SDL_RenderCopy (m_pRenderer, m_pTexture, \
+    //SDL_RenderCopy (m_pRenderer, m_pTexture, \
         &m_sourceRectangle, &m_destinationRectangle);
 
-    SDL_RenderCopy (m_pRenderer, m_pTexture, \
-        &m_sourceRectangle, &m_destinationRectangle);
+    //SDL_RenderCopyEx (m_pRenderer, m_pTexture, \
+        &m_sourceRectangle, &m_destinationRectangle, 0, 0, SDL_FLIP_HORIZONTAL);
 
+    TextureManager::getInstance().draw ("animate", 0, 0, 128, 82, m_pRenderer);
+
+    TextureManager::getInstance().drawFrame ("animate", 100, 100, \
+        128, 82, m_pRenderer, 1, m_currFrameIndex);
 
     SDL_RenderPresent (m_pRenderer);
 }
 
 void Game::update()
 {
-
+    static unsigned int currTime, lastTime = 0;
+    static int index = 0;
+    currTime = SDL_GetTicks();
+    if(currTime >= lastTime + animDelayInMS)
+    {
+        //Move the source window in x Axis
+        //m_sourceRectangle.x = 128 * (index++ % 6);
+        m_currFrameIndex = index++ % 6;
+        //cout << m_sourceRectangle.x << "\n";
+        lastTime = currTime;
+        if(index > 6)
+            index = 0;
+    }
 }
 
 void Game::handleEvents()
