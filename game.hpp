@@ -3,9 +3,13 @@
 
 #include <string>
 #include "common.hpp"
+#include "textureManager.hpp"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 using namespace std;
+
+static constexpr unsigned int animDelayInMS = 100;
 
 class Game
 {
@@ -14,14 +18,15 @@ private:
     SDL_Window *m_pWindow{nullptr};
     SDL_Renderer *m_pRenderer{nullptr};
     SDL_Texture *m_pTexture{nullptr};
-
     SDL_Rect m_sourceRectangle, m_destinationRectangle;
+    int m_currFrameIndex{0};
 
 public:
     Game();
     virtual ~Game();
     bool init(const string nameOfWindow, const int xPos, \
-        const int yPos, const int wWidth, const int hHeight, const bool isFullScreen);
+        const int yPos, const int wWidth, const int hHeight, \
+        const bool isFullScreen);
     void render();
     void update();
     void handleEvents();
